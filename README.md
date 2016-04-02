@@ -34,4 +34,4 @@ main = do
 
 And that's it!
 
-Check out [the example repository](http://www.github.com/parsonsmatt/purescript-pux-undo).
+Check out [the example repository](http://www.github.com/parsonsmatt/purescript-pux-undo-ex).
