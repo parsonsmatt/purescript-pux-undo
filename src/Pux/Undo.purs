@@ -1,6 +1,10 @@
 module Pux.Undo 
   ( Action(..)
+  , Button
   , History
+  , UndoButton
+  , RedoButton
+  , Button
   , initialState
   , update
   , simpleView
@@ -65,9 +69,9 @@ update f (Next n) = editToPast (f n)
 -- |         H.li # H.text "Stuff"
 -- | -- etc...
 -- | ```
-simpleView :: forall n. Html n -> Html (Action n)
+simpleView :: forall n s. (s -> Html n) -> History s -> Html (Action n)
 simpleView =
-    view \undo redo c ->
+    view \undo redo _ _ c ->
         H.div # do
             undo # H.text "Undo"
             redo # H.text "Redo"
@@ -78,12 +82,13 @@ simpleView =
 -- | The type signature of this function is a little scary. Be not afraid! The
 -- | usage is much simpler than it looks. We use it to create a custom wrapper
 -- | for the Undo and Redo buttons. We pass in a function that accepts an undo,
--- | redo, and inner component.
+-- | redo, list of past states, and list of future states, and the component to
+-- | wrap.
 -- | 
 -- | ```purescript
 -- | wrapper :: Html MyAction -> Html (Undo.Action MyAction)
 -- | wrapper = 
--- |     Undo.view \undo redo component ->
+-- |     Undo.view \undo redo past future component ->
 -- |         H.div # do
 -- |             undo ! A.className "btn btn-warning" # do
 -- |                 H.text "Undo"
@@ -102,8 +107,30 @@ simpleView =
 -- | 
 -- | The above example uses Bootstrap styling on the buttons to demonstrate
 -- | that they behave just like normal Pux `Html` elements.
-view :: forall r n. ((Array (Attribute (Action n)) -> Array (Html (Action n)) -> Html (Action n)) -> (Array (Attribute (Action n)) -> Array (Html (Action n)) -> Html (Action n)) -> Html (Action n) -> r) -> Html n -> r
-view k = k undoButton redoButton <<< H.forwardTo Next
+view 
+    :: forall r s n
+     . ( UndoButton n 
+      -> RedoButton n 
+      -> Past s
+      -> Future s
+      -> Html (Action n) 
+      -> r)
+     -> (s -> Html n) 
+     -> History s 
+     -> r
+view k c (Zipper p s f) =
+    k undoButton redoButton p f (H.forwardTo Next (c s))
+
+type Button n =
+    Array (Attribute (Action n))
+    -> Array (Html (Action n))
+    -> Html (Action n)
+
+type Past s = List s
+type Future s = List s
+
+type UndoButton n = Button n
+type RedoButton n = Button n
 
 -- | Attempts to apply the function `f` to the value `a`. If the function 
 -- | returns `Nothing`, then we return the initial value unchanged. Otherwise,
@@ -111,12 +138,12 @@ view k = k undoButton redoButton <<< H.forwardTo Next
 attempt :: forall a. (a -> Maybe a) -> a -> a
 attempt f a = fromMaybe a (f a)
 
-btn :: forall n. Action n -> Array (Attribute (Action n)) -> Array (Html (Action n)) -> Html (Action n)
+btn :: forall n. Action n -> Button n
 btn act attrs elems = H.button (attrs <> [E.onClick (const act)]) elems
 
-undoButton :: forall n. Array (Attribute (Action n)) -> Array (Html (Action n)) -> Html (Action n)
+undoButton :: forall n. UndoButton n
 undoButton = btn Undo
 
-redoButton :: forall n. Array (Attribute (Action n)) -> Array (Html (Action n)) -> Html (Action n)
+redoButton :: forall n. RedoButton n
 redoButton = btn Redo
 
