@@ -40,16 +40,6 @@ initialState :: forall a. a -> History a
 
 Initializes the state of an Undo component.
 
-#### `editToPast`
-
-``` purescript
-editToPast :: forall a. (a -> a) -> History a -> History a
-```
-
-Takes a function operating on a state value and a history. Applies the
-function to the current state to yield a new state, and pushes the old
-state into the past.
-
 #### `update`
 
 ``` purescript
@@ -68,7 +58,7 @@ A simple view function that renders the given component along with a plain
 undo and redo button.
 
 ```purescript
-view :: State -> Html Action
+view :: State -> Html (Undo.Action MyAction)
 view state = Undo.simpleView $ H.div # do
     H.ul # do
         H.li # H.text "Stuff"
@@ -108,33 +98,5 @@ wrappedView state = wrapper (myView state)
 
 The above example uses Bootstrap styling on the buttons to demonstrate
 that they behave just like normal Pux `Html` elements.
-
-#### `attempt`
-
-``` purescript
-attempt :: forall a. (a -> Maybe a) -> a -> a
-```
-
-Attempts to apply the function `f` to the value `a`. If the function 
-returns `Nothing`, then we return the initial value unchanged. Otherwise,
-we return the new value.
-
-#### `btn`
-
-``` purescript
-btn :: forall n. Action n -> Array (Attribute (Action n)) -> Array (Html (Action n)) -> Html (Action n)
-```
-
-#### `undoButton`
-
-``` purescript
-undoButton :: forall n. Array (Attribute (Action n)) -> Array (Html (Action n)) -> Html (Action n)
-```
-
-#### `redoButton`
-
-``` purescript
-redoButton :: forall n. Array (Attribute (Action n)) -> Array (Html (Action n)) -> Html (Action n)
-```
 
 

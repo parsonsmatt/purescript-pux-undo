@@ -1,4 +1,11 @@
-module Pux.Undo where
+module Pux.Undo 
+  ( Action(..)
+  , History
+  , initialState
+  , update
+  , simpleView
+  , view
+  ) where
 
 import Prelude
 
@@ -52,7 +59,7 @@ update f (Next n) = editToPast (f n)
 -- | undo and redo button.
 -- |
 -- | ```purescript
--- | view :: State -> Html Action
+-- | view :: State -> Html (Undo.Action MyAction)
 -- | view state = Undo.simpleView $ H.div # do
 -- |     H.ul # do
 -- |         H.li # H.text "Stuff"
