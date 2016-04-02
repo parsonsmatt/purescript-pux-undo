@@ -51,35 +51,28 @@ Wraps a provided update function in the Undo action.
 #### `simpleView`
 
 ``` purescript
-simpleView :: forall n. Html n -> Html (Action n)
+simpleView :: forall n s. (s -> Html n) -> History s -> Html (Action n)
 ```
 
 A simple view function that renders the given component along with a plain
 undo and redo button.
 
-```purescript
-view :: State -> Html (Undo.Action MyAction)
-view state = Undo.simpleView $ H.div # do
-    H.ul # do
-        H.li # H.text "Stuff"
--- etc...
-```
-
 #### `view`
 
 ``` purescript
-view :: forall r n. ((Array (Attribute (Action n)) -> Array (Html (Action n)) -> Html (Action n)) -> (Array (Attribute (Action n)) -> Array (Html (Action n)) -> Html (Action n)) -> Html (Action n) -> r) -> Html n -> r
+view :: forall r s n. (UndoButton n -> RedoButton n -> Past s -> Future s -> Html (Action n) -> r) -> (s -> Html n) -> History s -> r
 ```
 
 The type signature of this function is a little scary. Be not afraid! The
 usage is much simpler than it looks. We use it to create a custom wrapper
 for the Undo and Redo buttons. We pass in a function that accepts an undo,
-redo, and inner component.
+redo, list of past states, and list of future states, and the component to
+wrap.
 
 ```purescript
 wrapper :: Html MyAction -> Html (Undo.Action MyAction)
 wrapper = 
-    Undo.view \undo redo component ->
+    Undo.view \undo redo past future component ->
         H.div # do
             undo ! A.className "btn btn-warning" # do
                 H.text "Undo"
@@ -98,5 +91,30 @@ wrappedView state = wrapper (myView state)
 
 The above example uses Bootstrap styling on the buttons to demonstrate
 that they behave just like normal Pux `Html` elements.
+
+#### `Button`
+
+``` purescript
+type Button n = Array (Attribute (Action n)) -> Array (Html (Action n)) -> Html (Action n)
+```
+
+A type alias that makes the `view` function's type signature remotely
+understandable.
+
+#### `UndoButton`
+
+``` purescript
+type UndoButton n = Button n
+```
+
+Used to disambiguate the type in the view function.
+
+#### `RedoButton`
+
+``` purescript
+type RedoButton n = Button n
+```
+
+Used to disambiguate the type in the view function.
 
 

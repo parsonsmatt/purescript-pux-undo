@@ -1,15 +1,15 @@
 module Pux.Undo 
-  ( Action(..)
-  , Button
-  , History
-  , UndoButton
-  , RedoButton
-  , Button
-  , initialState
-  , update
-  , simpleView
-  , view
-  ) where
+    ( Action(..)
+    , Button
+    , History
+    , UndoButton
+    , RedoButton
+    , Button
+    , initialState
+    , update
+    , simpleView
+    , view
+    ) where
 
 import Prelude
 
@@ -61,14 +61,6 @@ update f (Next n) = editToPast (f n)
 
 -- | A simple view function that renders the given component along with a plain
 -- | undo and redo button.
--- |
--- | ```purescript
--- | view :: State -> Html (Undo.Action MyAction)
--- | view state = Undo.simpleView $ H.div # do
--- |     H.ul # do
--- |         H.li # H.text "Stuff"
--- | -- etc...
--- | ```
 simpleView :: forall n s. (s -> Html n) -> History s -> Html (Action n)
 simpleView =
     view \undo redo _ _ c ->
@@ -121,15 +113,23 @@ view
 view k c (Zipper p s f) =
     k undoButton redoButton p f (H.forwardTo Next (c s))
 
+-- | A type alias that makes the `view` function's type signature remotely
+-- | understandable.
 type Button n =
     Array (Attribute (Action n))
     -> Array (Html (Action n))
     -> Html (Action n)
 
+-- | Used to disambiguate the type in the view function.
 type Past s = List s
+
+-- | Used to disambiguate the type in the view function.
 type Future s = List s
 
+-- | Used to disambiguate the type in the view function.
 type UndoButton n = Button n
+
+-- | Used to disambiguate the type in the view function.
 type RedoButton n = Button n
 
 -- | Attempts to apply the function `f` to the value `a`. If the function 
@@ -146,4 +146,3 @@ undoButton = btn Undo
 
 redoButton :: forall n. RedoButton n
 redoButton = btn Redo
-
