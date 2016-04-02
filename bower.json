@@ -1,0 +1,18 @@
+{
+  "name": "purescript-pux-undo",
+  "version": "0.1.0",
+  "moduleType": [
+    "node"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "output"
+  ],
+  "dependencies": {
+    "purescript-maybe": "^0.3.5",
+    "purescript-pux": "^2.0.1",
+    "purescript-list-zipper": "https://github.com/DavidHarrison/purescript-list-zipper.git#889f1e"
+  }
+}
