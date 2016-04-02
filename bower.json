@@ -1,5 +1,6 @@
 {
   "name": "purescript-pux-undo",
+  "license": "Apache-2.0",
   "authors": [
       "Matt Parsons <parsonsmatt@gmail.com>"
   ],
