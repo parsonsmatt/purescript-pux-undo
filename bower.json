@@ -1,5 +1,12 @@
 {
   "name": "purescript-pux-undo",
+  "authors": [
+      "Matt Parsons <parsonsmatt@gmail.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/parsonsmatt/purescript-pux-undo.git"
+  },
   "version": "0.1.0",
   "moduleType": [
     "node"

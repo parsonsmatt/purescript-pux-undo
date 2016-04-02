@@ -1,0 +1,41 @@
+{
+  "scripts": {
+    "postinstall": "bower install",
+    "build:clean": "rm -rf dist output",
+    "docs": "pulp docs",
+    "build": "pulp build",
+    "test": "pulp test"
+  },
+  "devDependencies": {
+    "bower": "^1.7.2",
+    "pulp": "^8.0.0",
+    "purescript": "^0.8.0"
+  },
+  "name": "purescript-pux-undo",
+  "description": "Provides a wrapper for adding undo/redo functionality to Pux components",
+  "version": "0.1.0",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "example": "examples"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/parsonsmatt/purescript-pux-undo.git"
+  },
+  "keywords": [
+    "purescript",
+    "react",
+    "elm",
+    "flux",
+    "redux",
+    "frp",
+    "virtual-dom",
+    "pux"
+  ],
+  "author": "Matt Parsons",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/parsonsmatt/purescript-pux-undo/issues"
+  }
+}

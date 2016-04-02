@@ -7,6 +7,7 @@ import Data.Array (Array, length, zip, (..))
 
 import Pux
 import Pux.Html as H
+import Pux.Html ((!), (#), (##))
 import Pux.Html.Attributes as A
 import Pux.Html.Events as E
 
@@ -20,11 +21,12 @@ data Action
 type State = Array String
 
 ui :: State -> H.Html Action
-ui todos = let bind = H.bind in
+ui todos =
     H.div # do
         H.input ! E.onKeyDown handleEnter ## []
         H.ul ## map todoItem (zip (0 .. length todos) todos)
   where
+    bind = H.bind
     todoItem (Tuple i str) = 
         H.li # do
             H.text str
